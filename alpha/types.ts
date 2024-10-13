@@ -1,30 +1,30 @@
 interface File {
   type: {
-    readonly name: string,
+    readonly key: string,
     value: string
   },
   version: {
-    readonly name: string,
+    readonly key: string,
     value: string
   },
   name: {
-    readonly name: string,
+    readonly key: string,
     value?: string
   },
   comment: {
-    readonly name: string,
+    readonly key: string,
     value?: string
   },
   exec: {
-    readonly name: string,
+    readonly key: string,
     value?: string
   },
   icon: {
-    readonly name: string,
+    readonly key: string,
     value?: string
   },
   terminal: {
-    readonly name: string,
+    readonly key: string,
     value: boolean
   }
 };
