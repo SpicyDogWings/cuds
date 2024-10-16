@@ -110,6 +110,7 @@
     "https://deno.land/x/cliffy@v1.0.0-rc.4/keycode/_key_codes.ts": "917f0a2da0dbace08cf29bcfdaaa2257da9fe7e705fff8867d86ed69dfb08cfe",
     "https://deno.land/x/cliffy@v1.0.0-rc.4/keycode/key_code.ts": "730fa675ca12fc2a99ba718aa8dbebb1f2c89afd47484e30ef3cb705ddfca367",
     "https://deno.land/x/cliffy@v1.0.0-rc.4/keycode/mod.ts": "981b828bddada634e62a2a067b9d1592986180c4e920eb55e0a43cc085eb98ab",
+    "https://deno.land/x/cliffy@v1.0.0-rc.4/keypress/mod.ts": "ee4e905b59863f57e56aa7117d3583d0755456ea010eaea5fb9bbb002dea05bf",
     "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/_figures.ts": "e22413ddd51bb271b6b861a058742e83aaa3f62c14e8162cb73ae6f047062f51",
     "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/_generic_input.ts": "f1cb8eff5868d1c1adb3a643c451ba3227b546c56caaa21a617a56311e228cca",
     "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/_generic_list.ts": "138540a55f62f3f6be6bdc81eed3a6268a46dc6ef5333c83b83b0d5b813ba4fd",
