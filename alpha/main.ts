@@ -1,131 +1,105 @@
-import  { error, warn, success, info } from "./presets.ts";
-import { colors } from "colors/cliffy";
-import { Input, Select } from "prompt/cliffy";
+import { Input } from "prompt/cliffy";
+import { keypress, KeyPressEvent } from "keypress/cliffy";
+import { File } from "./types.ts";
+import { info, warning, success } from "./presets.ts";
+import printFile from "./utils/printFile.ts";
+import genFile from "./utils/genFile.ts";
 
-//const message = info("Creador de Atajos de aplicaciones")
-//console.log('{' + message + '}');
-
-//[Desktop Entry]
-//Type=Application
-//Name=LibreSprite
-//Comment=App para hacer pixelart
-//Exec=/home/box/Programs/LibreSprite-x86_64.AppImage
-//Icon=/home/box/Pictures/icons/ase64.png
-//Terminal=false
-
-const file = {
-  type: {
-    camp: "Type=",
-    value: ""
-  },
-  version: {
-    camp: "Version=",
-    value: ""
-  },
-  name: {
-    camp: "Name=",
-    value: ""
-  },
-  comment: {
-    camp: "Comment=",
-    value: ""
-  },
-  exec: {
-    camp: "Exec=",
-    value: ""
-  },
-  icon: {
-    camp: "Icon=",
-    value: ""
-  },
-  terminal: {
-    camp: "Terminal=",
-    value: ""
-  }
-}
-
-console.clear()
-console.log(info("Creador de Atajos de aplicaciones"));
-file.name.value = await Input.prompt("Nombre del atajo");
-file.comment.value = await Input.prompt("Descripción");
-file.exec.value = await Input.prompt("Ruta completa del ejecutable");
-file.icon.value = await Input.prompt("Ruta completa del icono");
-console.clear()
-while (!file.name.value || !file.exec.value || !file.icon.value) {
-  console.clear()
-  if (!file.name.value) {
-    console.log(warn(" ! Nombre del atajo vacio "));
-    file.name.value = await Input.prompt("Nombre");
-  }
-  if (!file.exec.value) {
-    console.log(warn(" ! Ruta del ejecutable vacia "));
-    file.exec.value = await Input.prompt("Ejecutable");
-  }
-  if (!file.icon.value) {
-    console.log(warn(" ! Ruta del icono vacia "));
-    file.icon.value = await Input.prompt("Icono");
-  }
-}
-// im here
-console.clear()
-let file = `[Desktop Entry]
-Version=1.0
-Type=Application
-Name=${name}
-Comment=${comment}
-Exec=${exec}
-Icon=${icon}
-Terminal=false
-`;
-let fileName = `${name.toLowerCase().replace(/\s/g, "-")}.desktop`;
-let confirmation: number = 0;
-while (confirmation !== 5) {
-  console.log(info("File:"), fileName);
-  console.log(file);
-  confirmation = await Select.prompt({
-    message: "Editar",
-    options: [
-      { name: "Name", value: 1 },
-      { name: "Comment", value: 2 },
-      { name: "Exec", value: 3 },
-      { name: "Icon", value: 4 },
-      Select.separator("----------------"),
-      { name: "Confirmar", value: 5 },
-      { name: "Cancelar", value: 6 }
-    ]
-  })
-  if (confirmation === 6) {
-    break;
-  } else if (confirmation === 1) {
-    name = await Input.prompt("Nombre del atajo");
-    fileName = `${name.toLowerCase().replace(/\s/g, "-")}.desktop`;
-  } else if (confirmation === 2) {
-    comment = await Input.prompt("Descripción");
-  } else if (confirmation === 3) {
-    exec = await Input.prompt("Ruta completa del ejecutable");
-  } else if (confirmation === 4) {
-    icon = await Input.prompt("Ruta completa del icono");
+const file: File = {
+  type: { key: "Type", value: "Application" },
+  version: { key: "Version", value: "1.0" },
+  name: { key: "Name" },
+  comment: { key: "Comment" },
+  exec: { key: "Exec" },
+  icon: { key: "Icon" },
+  terminal: { key: "Terminal", value: false },
+};
+console.clear();
+let key = "0";
+while (true) {
+  printFile(file);
+  if (!key) {
+    console.log(warning("Invalid key"));
   } else {
-    console.log(warn(" ! Opción invalida "));
+    console.log()
   }
-  file = `[Desktop Entry]
-Version=1.0
-Type=Application
-Name=${name}
-Comment=${comment}
-Exec=${exec}
-Icon=${icon}
-Terminal=false
-  `;
-  console.clear()
+  console.log()
+  console.log()
+  console.log('press "?" if need help')
+  for await (const event: KeyPressEvent of keypress()) {
+    if (event.key === "n") {
+      key = "n";
+      break;
+    } else if (event.key === "c") {
+      key = "c";
+      break;
+    } else if (event.key === "e") {
+      key = "e";
+      break;
+    } else if (event.key === "i") {
+      key = "i";
+      break;
+    } else if (event.key === "?") {
+      key = "?";
+      break;
+    } else if (event.key === "w") {
+      key = "w";
+      break;
+    } else if (event.key === "q") {
+      key = "q";
+      break;
+    } else {
+      key = undefined;
+      break;
+    }
+  }
+  console.clear();
+  if (key === "n") {
+    file.name.value = await Input.prompt("Nombre del atajo");
+  } else if (key === "c") {
+    file.comment.value = await Input.prompt("Descripción"); 
+  } else if (key === "e") {
+    file.exec.value = await Input.prompt("Path to bin"); 
+  } else if (key === "i") {
+    file.icon.value = await Input.prompt("Path to icon");
+  } else if (key === "?") {
+    console.clear()
+    console.log(`
+
+
+┌───Options───────┐  
+│                 │─┐
+│  n. Name        │ │
+│  c. Comment     │ │
+│  e. Exec        │ │
+│  i. Icon        │ │
+│                 │ │
+│  w. Write       │ │
+│  q. Quit        │ │
+│                 │ │
+└─────────────────┘ │
+ └──────────────────┘
+
+
+    `)
+    console.log("q: return to main menu")
+    for await (const event: KeyPressEvent of keypress()) {
+      if (event.key === "q"){
+        break;
+      }
+    }
+  } else if (key === "w") {
+    const final = genFile(file);
+    console.log(success("File generated"));
+    console.log(final);
+    let fileName = file.name.value ? file.name.value : "undefined";
+    fileName = `${fileName.toLowerCase().replace(/\s/g, "-")}.desktop`;
+    const absHomeDir = Deno.env.get("HOME")!;
+    const path = `${absHomeDir}/.local/share/applications/${fileName}`;
+    await Deno.writeTextFile(path, final);
+    Deno.exit(1);
+  } else if (key === "q") {
+    Deno.exit(1);
+  }
+  console.clear();
 }
-if (confirmation === 6) {
-  console.log(error(" x Cancelled, no se ha creado el archivo "));
-  Deno.exit();
-}
-console.log(info("File generated"));
-console.log(success(file));
-const absHomeDir = Deno.env.get("HOME")!;
-const path = `${absHomeDir}/.local/share/applications/${fileName}`;
-await Deno.writeTextFile(path, file);
-console.log(success("Archivo creado con éxito"));
