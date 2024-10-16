@@ -1,5 +1,7 @@
+import { File } from "../types.ts";
+
 export default (file: File) => {
-  let tempFile = `[Desktop Entry]
+let tempFile = `[Desktop Entry]
 Version=1.0
 Type=Application
 Name=${file.name.value}

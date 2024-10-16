@@ -1,8 +1,9 @@
 import { Input } from "prompt/cliffy";
-import { keypress, KeyPressEvent } from "keypress/cliffy";
+import { keypress } from "keypress/cliffy";
 import { File } from "./types.ts";
-import { info, warning, success } from "./presets.ts";
+import { warning, success } from "./presets.ts";
 import printFile from "./utils/printFile.ts";
+import printHelp from "./utils/printHelp.ts";
 import genFile from "./utils/genFile.ts";
 
 const file: File = {
@@ -15,7 +16,7 @@ const file: File = {
   terminal: { key: "Terminal", value: false },
 };
 console.clear();
-let key = "0";
+let key = undefined;
 while (true) {
   printFile(file);
   if (!key) {
@@ -26,7 +27,7 @@ while (true) {
   console.log()
   console.log()
   console.log('press "?" if need help')
-  for await (const event: KeyPressEvent of keypress()) {
+  for await (const event of keypress()) {
     if (event.key === "n") {
       key = "n";
       break;
@@ -39,14 +40,14 @@ while (true) {
     } else if (event.key === "i") {
       key = "i";
       break;
-    } else if (event.key === "?") {
-      key = "?";
-      break;
     } else if (event.key === "w") {
       key = "w";
       break;
     } else if (event.key === "q") {
       key = "q";
+      break;
+    } else if (event.key === "?") {
+      key = "?";
       break;
     } else {
       key = undefined;
@@ -59,35 +60,11 @@ while (true) {
   } else if (key === "c") {
     file.comment.value = await Input.prompt("Descripción"); 
   } else if (key === "e") {
-    file.exec.value = await Input.prompt("Path to bin"); 
+    file.exec.value = await Input.prompt("Path to script"); 
   } else if (key === "i") {
     file.icon.value = await Input.prompt("Path to icon");
   } else if (key === "?") {
-    console.clear()
-    console.log(`
-
-
-┌───Options───────┐  
-│                 │─┐
-│  n. Name        │ │
-│  c. Comment     │ │
-│  e. Exec        │ │
-│  i. Icon        │ │
-│                 │ │
-│  w. Write       │ │
-│  q. Quit        │ │
-│                 │ │
-└─────────────────┘ │
- └──────────────────┘
-
-
-    `)
-    console.log("q: return to main menu")
-    for await (const event: KeyPressEvent of keypress()) {
-      if (event.key === "q"){
-        break;
-      }
-    }
+    await printHelp()
   } else if (key === "w") {
     const final = genFile(file);
     console.log(success("File generated"));
