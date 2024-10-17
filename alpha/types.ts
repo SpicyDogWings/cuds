@@ -29,4 +29,4 @@ interface File {
   }
 };
 
-export { File }
+export type { File }
