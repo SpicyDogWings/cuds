@@ -1,7 +1,8 @@
-import { Input } from "prompt/cliffy";
-import { keypress } from "keypress/cliffy";
-import { File } from "./types.ts";
+import { Input, Toggle } from "prompt/cliffy";
+import keyListener from "./utils/keyListener.ts";
+import { File } from "./types/File.ts";
 import { warning, success } from "./presets.ts";
+import { spacer } from "./config.ts";
 import printFile from "./utils/printFile.ts";
 import printHelp from "./utils/printHelp.ts";
 import genFile from "./utils/genFile.ts";
@@ -16,59 +17,37 @@ const file: File = {
   terminal: { key: "Terminal", value: false },
 };
 console.clear();
-let key = undefined;
+let key: string | undefined = "0";
 while (true) {
+  console.log();
   printFile(file);
   if (!key) {
-    console.log(warning("Invalid key"));
+    console.log(spacer, warning("Invalid key"));
   } else {
-    console.log()
+    console.log();
   }
-  console.log()
-  console.log()
-  console.log('press "?" if need help')
-  for await (const event of keypress()) {
-    if (event.key === "n") {
-      key = "n";
-      break;
-    } else if (event.key === "c") {
-      key = "c";
-      break;
-    } else if (event.key === "e") {
-      key = "e";
-      break;
-    } else if (event.key === "i") {
-      key = "i";
-      break;
-    } else if (event.key === "w") {
-      key = "w";
-      break;
-    } else if (event.key === "q") {
-      key = "q";
-      break;
-    } else if (event.key === "?") {
-      key = "?";
-      break;
-    } else {
-      key = undefined;
-      break;
-    }
-  }
+  console.log();
+  key = await keyListener();
   console.clear();
   if (key === "n") {
     file.name.value = await Input.prompt("Nombre del atajo");
   } else if (key === "c") {
-    file.comment.value = await Input.prompt("Descripción"); 
+    file.comment.value = await Input.prompt("Descripción");
   } else if (key === "e") {
-    file.exec.value = await Input.prompt("Path to script"); 
+    file.exec.value = await Input.prompt("Path to script");
   } else if (key === "i") {
     file.icon.value = await Input.prompt("Path to icon");
+  } else if (key === "y") {
+    file.type.value = await Input.prompt("Show application?");
+  } else if (key === "t") {
+    file.terminal.value = await Toggle.prompt("Show terminal?");
+  } else if (key === "v") {
+    file.version.value = await Input.prompt("Show terminal?");
   } else if (key === "?") {
-    await printHelp()
+    await printHelp();
   } else if (key === "w") {
     const final = genFile(file);
-    console.log(success("File generated"));
-    console.log(final);
+    console.log(spacer, success("File generated"));
     let fileName = file.name.value ? file.name.value : "undefined";
     fileName = `${fileName.toLowerCase().replace(/\s/g, "-")}.desktop`;
     const absHomeDir = Deno.env.get("HOME")!;
@@ -77,6 +56,8 @@ while (true) {
     Deno.exit(1);
   } else if (key === "q") {
     Deno.exit(1);
+  } else {
+    key = undefined;
   }
   console.clear();
 }
