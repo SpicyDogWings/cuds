@@ -1,3 +1,1 @@
-
-export let spacer = " ".repeat(5);
-
+export const spacer = " ".repeat(5);

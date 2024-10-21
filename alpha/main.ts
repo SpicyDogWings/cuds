@@ -1,8 +1,8 @@
 import { Input, Toggle } from "prompt/cliffy";
-import keyListener from "./utils/keyListener.ts";
 import { File } from "./types/File.ts";
-import { warning, success } from "./presets.ts";
+import { warning, success, title } from "./presets.ts";
 import { spacer } from "./config.ts";
+import keyListener from "./utils/keyListener.ts";
 import printFile from "./utils/printFile.ts";
 import printHelp from "./utils/printHelp.ts";
 import genFile from "./utils/genFile.ts";
@@ -19,6 +19,7 @@ const file: File = {
 console.clear();
 let key: string | undefined = "0";
 while (true) {
+  console.log(title("  File preview  "));
   console.log();
   printFile(file);
   if (!key) {
