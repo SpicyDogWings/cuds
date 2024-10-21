@@ -1,7 +1,7 @@
 import { spacer } from "../config.ts";
 import { Keys } from "../types/Keys.ts";
 import keyListener from "./keyListener.ts";
-import { warning } from "../presets.ts";
+import { warning, title } from "../presets.ts";
 
 export default async () => {
   let key: string | undefined = "0";
@@ -18,6 +18,7 @@ export default async () => {
   ];
   while (true) {
     console.clear();
+    console.log(title("  Options  "));
     console.log();
     for (const key of keyList) {
       console.log(spacer, key.key + "  " + key.label);
